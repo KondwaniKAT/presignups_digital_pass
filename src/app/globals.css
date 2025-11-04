@@ -1,26 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
+  --brand: #ED217C;
+  --display-weight: 800;
+  --display-size: 46px;
+  --display-line: 130%;
+  --display-tracking: -2px;
+
+  --heading-1-weight: 700;
+  --heading-1-size: 40px;
+  --heading-1-line: 120%;
+  --heading-1-tracking: -1.5px;
+
+  --heading-2-weight: 600;
+  --heading-2-size: 32px;
+  --heading-2-line: 125%;
+  --heading-2-tracking: -1px;
+
+  --heading-3-weight: 500;
+  --heading-3-size: 24px;
+  --heading-3-line: 125%;
+  --heading-3-tracking: -0.4px;
+
+  --heading-4-weight: 400;
+  --heading-4-size: 20px;
+  --heading-4-line: 130%;
+  --heading-4-tracking: -0.4px;
+
+  --paragraph-weight: 300;
+  --paragraph-size: 16px;
+  --paragraph-line: 145%;
+  --paragraph-tracking: -0.4px;
+
+  --small-text-weight: 200;
+  --small-text-size: 14px;
+  --small-text-line: 145%;
+  --small-text-tracking: -0.4px;
+  
+  --caption-weight: 100;
+  --caption-size: 12px;
+  --caption-line: 150%;
+  --caption-tracking: -0.2px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes float-up {
+  0% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-200px);
+    opacity: 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-float-up {
+  animation: float-up 4s ease-in-out infinite;
 }
+
+.animate-shoot-star {
+  animation: shoot-star 2.5s linear infinite;
+}
+
+
+@layer base{
+  html, body {
+    background: var(--background);
+    color: var(--foreground);
+    scroll-behavior: smooth;
+    font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, 'Open Sans', 'Helvetica Neue', Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+  
+}
+
+@layer components{
+  .btn{
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition shadow-sm hover:shadow md:text-base;
+  }
+  .btn-primary{
+    background: var(--brand);
+    color: white;
+  }
+  .btn-ghost{
+    @apply bg-transparent text-black border border-black/1 hover:bg-black/2 cursor-pointer;
+  }
+
+  .btn-white{
+    border-color: #ffffff;
+    color:#ffffff;
+    outline-width: 1px;
+  }
+
+  .btn-link{
+    color: var(--brand);
+  }
+
+  .card{
+    @apply rounded-2xl overflow-hidden shadow-sm bg-white border border-black/[0.06];
+  }
+
+  .nav-link{
+    @apply text-sm md:text-[15px] font-medium text-black/80 hover:text-["#EE2A7B"] transition cursor-pointer;
+  }
+
+  .chip{
+    @apply inline-flex items-center gap-2 rounded-full border border-black/10 px-3 py-1 text-xs font-medium;
+  }
+}
+
+/* --- Design System (utilities) --- */
+@layer utilities{
+  .text-display{
+    font-weight: var(--display-weight);
+    font-size: var(--display-size);
+    line-height: var(--display-line);
+    letter-spacing: var(--display-tracking);
+  }
+  .text-heading-1{
+    font-weight: var(--heading-1-weight);
+    font-size: var(--heading-1-size);
+    line-height: var(--heading-1-line);
+    letter-spacing: var(--heading-1-tracking);
+  }
+  .text-heading-2{
+    font-weight: var(--heading-2-weight);
+    font-size: var(--heading-2-size);
+    line-height: var(--heading-2-line);
+    letter-spacing: var(--heading-2-tracking);
+  }
+  .text-heading-3{
+    font-weight: var(--heading-3-weight);
+    font-size: var(--heading-3-size);
+    line-height: var(--heading-3-line);
+    letter-spacing: var(--heading-3-tracking);
+  }
+  .text-heading-4{
+    font-weight: var(--heading-4-weight);
+    font-size: var(--heading-4-size);
+    line-height: var(--heading-4-line);
+    letter-spacing: var(--heading-4-tracking);
+  }
+
+  .paragraph{
+    font-weight: var(--paragraph-weight);
+    font-size: var(--paragraph-size);
+    line-height: var(--paragraph-line);
+    letter-spacing: var(--paragraph-tracking);
+  }
+
+  .small-text{
+    font-weight: var(--small-text-weight);
+    font-size: var(--small-text-size);
+    line-height: var(--small-text-line);
+    letter-spacing: var(--small-text-tracking);
+  }
+
+  .caption{
+    font-weight: var(--caption-weight);
+    font-size: var(--caption-size);
+    line-height: var(--caption-line);
+    letter-spacing: var(--caption-tracking);
+  }
+  .tint-brand{
+    /* a semi-transparent brand overlay */
+    background: color-mix(in srgb, var(--brand) 70%, transparent);
+  }
+  .container-px{
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  
+}
+
+/* Helpful helpers */
+.bg-brand { background: var(--brand); }
+.text-brand { color: var(--brand); }
+.border-brand { border-color: var(--brand); }

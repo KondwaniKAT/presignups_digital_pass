@@ -1,65 +1,268 @@
+'use client'
+
 import Image from "next/image";
+import React, {useMemo, useState} from "react";
+import { FaGoogle } from "react-icons/fa";
+import { FaApple } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa6";
+import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 export default function Home() {
+  const router = useRouter()
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    industry: "",
+    industryOther: "",
+    jobTitle: "",
+    interest: "",
+    agree: false,
+  })
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const industryOptions = useMemo(
+    () => [
+      "Arts",
+      "Tourism",
+      "Construction",
+      "Education",
+      "Finance",
+      "Healthcare",
+      "Hospitality",
+      "Manufacturing",
+      "Retail",
+      "Technology",
+      "Transportation",
+      "Other",
+      "Information Technology",
+      "Agency",
+    ],
+    []
+  )
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const {name, value, type} = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    if (name === "industry" && value !== "Other") {
+      setForm((prev) => ({ ...prev, industryOther: "" }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null)
+    if (!form.name || !form.email || !form.jobTitle || !form.industry) {
+      setError("Please fill in all required fields.")
+      return
+    }
+    if (form.industry === "Other" && !form.industryOther) {
+      setError("Please specify your industry.")
+      return
+    }
+    try {
+      setSubmitting(true)
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          industry:
+            form.industry === "Other" && form.industryOther
+              ? form.industryOther
+              : form.industry,
+          jobTitle: form.jobTitle,
+          interest: form.interest,
+          agree: form.agree,
+        }),
+      })
+      if (res.status === 409) {
+        setError("This email has already signed up.")
+        return
+      }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(data?.message || "Something went wrong. Please try again.")
+        return
+      }
+      router.push("/success")
+    } catch (err) {
+      setError("Network error. Please try again.")
+    } finally {
+      setSubmitting(false)
+    }
+  }
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className='min-h-screen bg-[#FFF3F7] flex flex-col'>
+      <div className="max-w-[370px] md:max-w-2xl mx-auto mt-2 p-6 border border-black/20 
+                    rounded-sm shadow-xl bg-[#F2F6FA]">
+                      {/*title*/}
+                      <div className="flex flex-col items-center justify-center text-center gap-3 mb-10">
+                        <h1 className="font-extrabold text-[28px] md:text-[35px] leading-[120%] tracking-[-0.05em] ">
+                        <span className="text-brand">Presignup:</span>
+                        <br/>
+                        <div className="text-[35px] mt-2">
+                          KAT Digital Pass Platform<span className="text-brand ">.</span>
+                        </div>
+                        </h1>
+                        <p className="font-normal text-[13px] md:text-[15px] leading-[150%] tracking-[-0.03em] max-w-sm">
+                            Fast, secure signup to receive early product updates and platform access.
+                        </p>
+                        <p className="font-normal text-[12px] md:text-[14px] leading-[160%] tracking-[-0.03em] text-black/70">
+                          Learn more on our {""}
+                          <a
+                            href={process.env.NEXT_PUBLIC_LANDING_URL || "https://kat-digital-pass.vercel.app/"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold underline text-brand"
+                          >
+                            Website
+                          </a>.
+                        </p>
+                    </div>
+                    {/*signup form*/}
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      {/*fullname*/}
+                      <div>
+                            <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
+                                Name<span className="text-brand">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={form.name}
+                                onChange={handleChange}
+                                placeholder="Your full name"
+                                className="italic font-normal text-[15px] leading-[150%] tracking-[0.03em] w-full rounded-sm 
+                                border border-black/10 px-4 py-3 focus:outline-none focus:ring-2 
+                                focus:ring-brand bg-white text-[#8E8E8E]"
+                            />
+                        </div>
+                        {/*Email*/}
+                        <div>
+                            <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
+                                Email<span className="text-brand">*</span>
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={form.email}
+                                onChange={handleChange}
+                                placeholder="your@email.com"
+                                className="italic font-normal text-[15px] leading-[150%] tracking-[0.03em] w-full 
+                                rounded-sm border border-black/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand 
+                                bg-white text-[#8E8E8E]"
+                            />
+                        </div>
+                        {/*Industry*/}
+                        <div>
+                            <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
+                                Industry sector<span className="text-brand">*</span>
+                            </label>
+                            <select
+                                name="industry"
+                                value={form.industry}
+                                onChange={handleChange}
+                                className="italic font-normal text-[15px] leading-[150%] tracking-[0.03em] w-full 
+                                rounded-sm border border-black/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand 
+                                bg-white text-[#8E8E8E]"
+                            >
+                                <option value="">Select your industry</option>
+                                {industryOptions.map((opt) => (
+                                  <option key={opt} value={opt}>{opt}</option>
+                                ))}
+                            </select>
+                        </div>
+                        {form.industry === "Other" && (
+                          <div>
+                            <label className="block text-[16px] md:text-lg font-semibold leading-[150%] tracking-[0.03em] mb-1"> 
+                                Specify your industry
+                            </label>
+                            <input
+                                type="text"
+                                name="industryOther"
+                                value={form.industryOther}
+                                onChange={handleChange}
+                                placeholder="e.g., Non-profit, Government, etc."
+                                className="italic font-normal text-[15px] leading-[150%] tracking-[0.03em] w-full 
+                                rounded-sm border border-black/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand 
+                                bg-white text-[#8E8E8E]"
+                            />
+                          </div>
+                        )}
+                        {/*Job title*/}
+                        <div>
+                            <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
+                                Job title<span className="text-brand">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="jobTitle"
+                                value={form.jobTitle}
+                                onChange={handleChange}
+                                placeholder="e.g., Operations Manager"
+                                className="italic font-normal text-[15px] leading-[150%] tracking-[0.03em] w-full 
+                                rounded-sm border border-black/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand 
+                                bg-white text-[#8E8E8E]"
+                            />
+                        </div>
+                        {/*Interest (optional)*/}
+                        <div>
+                            <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
+                                Why you're interested (optional)
+                            </label>
+                            <textarea
+                                name="interest"
+                                value={form.interest}
+                                onChange={handleChange}
+                                placeholder="Tell us why you're excited about our product"
+                                rows={4}
+                                className="italic font-normal text-[15px] leading-[150%] tracking-[0.03em] w-full 
+                                rounded-sm border border-black/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand 
+                                bg-white text-[#8E8E8E]"
+                            />
+                        </div>
+                        {/*terms & conditions*/}
+                        <div className="mt-10 flex items-start gap-2 text-sm">
+                            <input
+                                type="checkbox"
+                                name="agree"
+                                checked={form.agree}
+                                onChange={handleChange}
+                                className="translate-y-1 h-4 w-4 border border-black/20"
+                                required
+                            />
+                            <p className="font-normal text-[12px] md:text-[14px] leading-[180%] tracking-[-0.03em] text-black/70 max-w-[300px] md:max-w-[900px]">
+                                By signing up you agree to our {" "}
+                                <a href="/terms" className=" underline">
+                                    Terms & Conditions
+                                </a>{" "}
+                                and{" "}
+                                <a href="/privacy" className="font-semibold underline">
+                                    Privacy Policy
+                                </a>.
+                            </p>
+                        </div>
+                        {error && (
+                          <div className="text-red-600 text-sm">{error}</div>
+                        )}
+                        {/*sign up button*/}
+                        <div className="mt-10">
+                          <button type="submit" className="btn btn-primary w-full cursor-pointer disabled:opacity-60" disabled={submitting}>
+                              {submitting ? "Submitting..." : "Sign up"}
+                          </button>
+                        </div>
+                    </form>
+
+      </div>
     </div>
   );
 }
