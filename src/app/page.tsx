@@ -133,7 +133,7 @@ export default function Home() {
                       {/*fullname*/}
                       <div>
                             <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
-                                Name<span className="text-brand">*</span>
+                                Full Name<span className="text-brand">*</span>
                             </label>
                             <input
                                 type="text"
