@@ -9,7 +9,7 @@ const SuccessPage: React.FC = (): JSX.Element => {
                     You're on the waiting list<span className="text-brand">!</span>
                 </h1>
                 <p className="font-normal text-[14px] md:text-[16px] leading-[160%] tracking-[-0.02em] text-black/80">
-                    Thank you for signing up. We&apos;ll send product updates to you once we launch.
+                    Thank you for signing up. A member of the KAT team will be in touch to discuss your interest.
                 </p>
             </div>
         </div>

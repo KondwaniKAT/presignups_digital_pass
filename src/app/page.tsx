@@ -159,7 +159,7 @@ export default function Home() {
                         {/*Phone*/}
                         <div>
                             <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
-                                Phone number<span className="text-brand">*</span> <span className="text-sm text-gray-500">(Optional)</span>
+                                Phone number<span className="text-brand">*</span>
                             </label>
                             <input
                                 type="text"
