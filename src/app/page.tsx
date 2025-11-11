@@ -116,17 +116,7 @@ export default function Home() {
                         <p className="font-normal text-[13px] md:text-[15px] leading-[150%] tracking-[-0.03em] max-w-sm">
                             Fast, secure signup to receive early product updates and platform access.
                         </p>
-                        <p className="font-normal text-[12px] md:text-[14px] leading-[160%] tracking-[-0.03em] text-black/70">
-                          Learn more on our {""}
-                          <a
-                            href={process.env.NEXT_PUBLIC_LANDING_URL || "https://kat-digital-pass.vercel.app/"}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-semibold underline text-brand"
-                          >
-                            Website
-                          </a>.
-                        </p>
+                        
                     </div>
                     {/*signup form*/}
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -217,7 +207,7 @@ export default function Home() {
                         {/*Interest (optional)*/}
                         <div>
                             <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
-                                Why you're interested (optional)
+                                Why you&apos;re interested (optional)
                             </label>
                             <textarea
                                 name="interest"
