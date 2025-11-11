@@ -6,6 +6,8 @@ type SignupPayload = {
   email: string
   industry: string
   jobTitle: string
+  organisation: string
+  phone: string
   interest?: string
   agree?: boolean
 }
@@ -55,8 +57,8 @@ async function sendConfirmationEmail(params: { to: string; name: string }) {
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as SignupPayload
-    const { name, email, industry, jobTitle, interest } = body
-    if (!name || !email || !industry || !jobTitle) {
+    const { name, email, industry, jobTitle, organisation, phone, interest } = body
+    if (!name || !email || !industry || !jobTitle || !organisation || !phone) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 })
     }
 
@@ -84,6 +86,8 @@ export async function POST(req: Request) {
       email,
       industry,
       job_title: jobTitle,
+      organisation,
+      phone,
       interest,
     })
     if (insertError) {

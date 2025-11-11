@@ -16,6 +16,8 @@ export default function Home() {
     industry: "",
     industryOther: "",
     jobTitle: "",
+    organisation: "",
+    phone: "",
     interest: "",
     agree: false,
   })
@@ -59,7 +61,7 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null)
-    if (!form.name || !form.email || !form.jobTitle || !form.industry) {
+    if (!form.name || !form.email || !form.jobTitle || !form.industry || !form.organisation || !form.phone) {
       setError("Please fill in all required fields.")
       return
     }
@@ -80,6 +82,8 @@ export default function Home() {
               ? form.industryOther
               : form.industry,
           jobTitle: form.jobTitle,
+          organisation: form.organisation,
+          phone: form.phone,
           interest: form.interest,
           agree: form.agree,
         }),
@@ -152,6 +156,38 @@ export default function Home() {
                                 bg-white text-[#8E8E8E]"
                             />
                         </div>
+                        {/*Phone*/}
+                        <div>
+                            <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
+                                Phone number<span className="text-brand">*</span> <span className="text-sm text-gray-500">(Optional)</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="phone"
+                                value={form.phone}
+                                onChange={handleChange}
+                                placeholder="Include country code if possible"
+                                className="italic font-normal text-[15px] leading-[150%] tracking-[0.03em] w-full 
+                                rounded-sm border border-black/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand 
+                                bg-white text-[#8E8E8E]"
+                            />
+                        </div>
+                        {/*Organisation*/}
+                        <div>
+                            <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
+                                Organisation<span className="text-brand">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="organisation"
+                                value={form.organisation}
+                                onChange={handleChange}
+                                placeholder="Company or organisation name"
+                                className="italic font-normal text-[15px] leading-[150%] tracking-[0.03em] w-full 
+                                rounded-sm border border-black/10 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand 
+                                bg-white text-[#8E8E8E]"
+                            />
+                        </div>
                         {/*Industry*/}
                         <div>
                             <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
@@ -207,7 +243,7 @@ export default function Home() {
                         {/*Interest (optional)*/}
                         <div>
                             <label className="block text-[18px] md:text-xl font-bold leading-[150%] tracking-[0.03em] mb-1"> 
-                                Why you&apos;re interested (optional)
+                                Why you&apos;re interested <span className="text-sm text-gray-500">(Optional)</span>
                             </label>
                             <textarea
                                 name="interest"
@@ -232,11 +268,7 @@ export default function Home() {
                             />
                             <p className="font-normal text-[12px] md:text-[14px] leading-[180%] tracking-[-0.03em] text-black/70 max-w-[300px] md:max-w-[900px]">
                                 By signing up you agree to our {" "}
-                                <a href="/terms" className=" underline">
-                                    Terms & Conditions
-                                </a>{" "}
-                                and{" "}
-                                <a href="/privacy" className="font-semibold underline">
+                                <a href="https://katmarketing.co.uk/privacy-policy" className="font-semibold underline">
                                     Privacy Policy
                                 </a>.
                             </p>
