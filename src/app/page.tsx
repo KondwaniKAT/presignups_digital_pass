@@ -113,8 +113,8 @@ export default function Home() {
                         <h1 className="font-extrabold text-[28px] md:text-[35px] leading-[120%] tracking-[-0.05em] ">
                         <span className="text-brand">Presignup:</span>
                         <br/>
-                        <div className="text-[35px] mt-2">
-                          KAT Digital Pass Platform<span className="text-brand ">.</span>
+                        <div className="text-[28px] mt-2">
+                          The KAT Digital Pass<span className="text-brand ">.</span>
                         </div>
                         </h1>
                         <p className="font-normal text-[13px] md:text-[15px] leading-[150%] tracking-[-0.03em] max-w-sm">
